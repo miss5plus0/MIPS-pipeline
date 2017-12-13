@@ -1,0 +1,124 @@
+module mips( clk, rst );
+   input   clk;
+   input   rst;
+   
+   wire 		     wwreg, mwreg, ewreg, wreg;           //?????????
+   wire 		     mwmem, ewmem, wmem;                  //?????????
+   wire 		     wpcir;                               //IR?PC????
+   wire [4:0]  aluc, ealuc;                         //ALUop
+   wire [1:0]  EXTOp;                               //??????
+   wire [1:0]  NPCOp;                               
+   wire [1:0]  GPRSel;                              //rs or rt?????
+   wire        wm2reg, mm2reg, em2reg, m2reg;       //???WD?????
+   wire 		     aluimm, ealuimm;                     //ALU???B?????
+   wire 		     rsrtequ;                             //rs?rt????
+   wire        jal, ejal;                           //jal??????
+   wire [1:0]  fwdb, fwda;                          //????
+   
+   wire [29:0] PC, NPC, dpc4, epc4;
+//   wire [31:0] DR_out;
+   wire [31:0] instr, einstr, minstr, winstr;       //??????
+   wire [4:0]  rs;
+   wire [4:0]  rt;
+   wire [4:0]  rd;
+   wire [4:0]  Shamt, eShamt;
+   wire [5:0]  Op;
+   wire [5:0]  Funct;
+   wire [15:0] Imm16; 
+   wire [31:0] Imm32, eimm;
+   wire [25:0] IMM;
+   
+   
+   wire [4:0]  drn, ern, mrn, wrn;//??????
+   wire [31:0] wdi, mC, mD;
+   wire [31:0] RD1, da, RD2, db, ea, eb, mb;
+   wire [31:0] im_dout, dm_dout;
+   wire [31:0] B, C, C_r, ALUout;
+   
+   assign Op = instr[31:26];
+   assign Funct = instr[5:0];
+   assign rs = instr[25:21];
+   assign rt = instr[20:16];
+   assign rd = instr[15:11];
+   assign Imm16 = instr[15:0];
+   assign IMM = instr[25:0];
+   assign Shamt = instr[10:6];
+   assign rsrtequ = (da == db);
+ //  assign ALUOp = `ALUOp_NOP
+   
+   PC U_PC (
+      .clk(clk), .rst(rst), .PCWr(wpcir), .NPC(NPC), .PC(PC)
+   ); 
+   
+   im_4k U_IM ( 
+      .addr(PC[9:0]) , .dout(im_dout)
+   );
+   
+   IR U_IR ( 
+      .clk(clk), .rst(rst), .IRWr(wpcir), .im_dout(im_dout), .instr(instr), .PC(PC), .PC4(dpc4)
+   );
+   
+   RF U_RF (
+      .A1(rs), .A2(rt), .A3(wrn), .WD(wdi), .clk(clk), 
+      .RFWr(wwreg), .RD1(RD1), .RD2(RD2)
+   );
+   
+   EXT U_EXT ( 
+      .Imm16(Imm16), .EXTOp(EXTOp), .Imm32(Imm32) 
+   );
+   
+   alu U_ALU ( 
+      .A(ea), .B(B), .ALUOp(ealuc), .C(ALUout),.Shamt(eShamt)
+   );
+   
+   dm_4k U_DM ( 
+      .addr(C_r[11:2]), .din(mb), .DMWr(mwmem), .clk(clk), .dout(dm_dout)
+   );
+   mux2 B_SEL (  //??ALU???B????
+      .d0(eb), .d1(eimm), .s(ealuimm), .y(B)
+   );
+   
+   mux3for5 GPR_Sel (//??rd or rt or 31????????
+      .d0(rd),.d1(rt),.d2(5'h1F),.s(GPRSel),.y(drn)
+   );
+   
+   mux2 WD_Sel (//???ALU???dm??????WD
+      .d0(mC),.d1(mD),.s(wm2reg),.y(wdi)
+   );
+   
+   NPC U_NPC(.PC(PC), .NPCOp(NPCOp), .IMM(IMM), .NPC(NPC), .da(da) 
+   );
+   
+   ctrl U_Ctrl(.rsrtequ(rsrtequ), .Op(Op), .Funct(Funct),.rs(rs), .rt(rt),
+            .GPRSel(GPRSel), .mrn(mrn), .mm2reg(mm2reg), .mwreg(mwreg), .ern(ern), .em2reg(em2reg), .ewreg(ewreg), .wreg(wreg), .m2reg(m2reg), .wmem(wmem), 
+            .jal(jal), .aluc(aluc), .aluimm(aluimm), .EXTOp(EXTOp), .fwdb(fwdb), .fwda(fwda), .nostall(wpcir), .NPCOp(NPCOp), .ewmem(ewmem));
+   
+   mux4for32 da_Sel (
+       .d0(RD1), .d1(C), .d2(C_r), .d3(dm_dout), .s(fwda), .y(da)
+       );
+   
+   mux4for32 db_Sel (
+       .d0(RD2), .d1(C), .d2(C_r), .d3(dm_dout), .s(fwdb), .y(db)
+       ); 
+       
+   mux2 C_Sel (//?ejal?1????epc4?????
+       .d0(ALUout), .d1({epc4,2'b00}), .s(ejal), .y(C)
+       );
+       
+   idexe U_id2exe (clk, rst, wreg, m2reg, wmem, jal, aluc, aluimm, Shamt, dpc4, da, db, Imm32, drn, instr,
+  ewreg, em2reg, ewmem, ejal, ealuc, ealuimm, eShamt, einstr, epc4, ea, eb, eimm, ern);
+  
+   exe2mem U_exe2mem (clk, rst, ewreg, em2reg, ewmem, einstr, C, eb, ern,
+  mwreg, mm2reg, mwmem, C_r, minstr, mb, mrn);
+    
+    mem2wb U_mem2wb (clk, rst, mwreg, mm2reg, dm_dout, C_r, mrn, minstr,
+  wwreg, wm2reg, mD, mC, winstr, wrn);     
+//   flopr #(.WIDTH(32)) A_flopr (.clk(clk), .rst(rst), .d(RD1), .q(RD1_r));
+   
+//   flopr #(.WIDTH(32)) B_flopr (.clk(clk), .rst(rst), .d(RD2), .q(RD2_r));
+   
+//   flopr #(.WIDTH(32)) C_flopr (.clk(clk), .rst(rst), .d(C), .q(C_r));
+   
+//   flopr #(.WIDTH(32)) D_flopr (.clk(clk), .rst(rst), .d(dm_dout), .q(DR_out));
+//     flopr #(.WIDTH(1)) D_flopr (.clk(clk), .rst(rst), .d(wpcir), .q(pre));
+endmodule

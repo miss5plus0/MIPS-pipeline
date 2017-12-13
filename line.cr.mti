@@ -1,0 +1,141 @@
+E:/modelsim/examples/hans_line/code/mips_tb.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/mips_tb.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module mips_tb
+
+Top level modules:
+	mips_tb
+
+} {} {}} E:/modelsim/examples/hans_line/code/idexe.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/idexe.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module idexe
+
+Top level modules:
+	idexe
+
+} {} {}} E:/modelsim/examples/hans_line/code/global_def.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/global_def.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+
+} {} {}} E:/modelsim/examples/hans_line/code/RF.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/RF.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module RF
+
+Top level modules:
+	RF
+
+} {} {}} E:/modelsim/examples/hans_line/code/ctrl_encode_def.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/ctrl_encode_def.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+
+} {} {}} E:/modelsim/examples/hans_line/code/instruction_def.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/instruction_def.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+
+} {} {}} E:/modelsim/examples/hans_line/code/NPC.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/NPC.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module NPC
+
+Top level modules:
+	NPC
+
+} {} {}} E:/modelsim/examples/hans_line/code/EXT.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/EXT.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module EXT
+
+Top level modules:
+	EXT
+
+} {} {}} E:/modelsim/examples/hans_line/code/alu.v {2 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/alu.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module alu
+** Warning: E:/modelsim/examples/hans_line/code/alu.v(6): (vlog-2608) Keyword "unsigned" not allowed here in Verilog 2001.
+
+
+Top level modules:
+	alu
+
+} {} {}} E:/modelsim/examples/hans_line/code/mux.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/mux.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module mux2
+-- Compiling module mux3for5
+-- Compiling module mux3for32
+-- Compiling module mux4for32
+-- Compiling module mux8
+-- Compiling module mux16
+
+Top level modules:
+	mux2
+	mux3for5
+	mux3for32
+	mux4for32
+	mux8
+	mux16
+
+} {} {}} E:/modelsim/examples/hans_line/code/flopr.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/flopr.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module flopr
+
+Top level modules:
+	flopr
+
+} {} {}} E:/modelsim/examples/hans_line/code/ctrl.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/ctrl.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module ctrl
+
+Top level modules:
+	ctrl
+
+} {} {}} E:/modelsim/examples/hans_line/code/im.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/im.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module im_4k
+
+Top level modules:
+	im_4k
+
+} {} {}} E:/modelsim/examples/hans_line/code/MemExtender.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/MemExtender.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module MemExtender
+
+Top level modules:
+	MemExtender
+
+} {} {}} E:/modelsim/examples/hans_line/code/dm.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/dm.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module dm_4k
+
+Top level modules:
+	dm_4k
+
+} {} {}} E:/modelsim/examples/hans_line/code/mips.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/mips.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module mips
+
+Top level modules:
+	mips
+
+} {} {}} E:/modelsim/examples/hans_line/code/mem2wb.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/mem2wb.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module mem2wb
+
+Top level modules:
+	mem2wb
+
+} {} {}} E:/modelsim/examples/hans_line/code/exe2mem.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/exe2mem.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module exe2mem
+
+Top level modules:
+	exe2mem
+
+} {} {}} E:/modelsim/examples/hans_line/code/PC.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/PC.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module PC
+
+Top level modules:
+	PC
+
+} {} {}} E:/modelsim/examples/hans_line/code/IR.v {1 {vlog -work work -vopt E:/modelsim/examples/hans_line/code/IR.v
+Model Technology ModelSim SE vlog 10.1a Compiler 2012.02 Feb 22 2012
+-- Compiling module IR
+
+Top level modules:
+	IR
+
+} {} {}}

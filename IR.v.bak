@@ -1,0 +1,36 @@
+module IR (clk, rst, IRWr, im_dout, instr, PC, PC4);
+               
+   input         clk;
+   input         rst;
+   input         IRWr; 
+   input  [31:2] PC;
+   input  [31:0] im_dout;
+   output [31:0] instr;
+   output [31:2] PC4;
+   reg [31:0]    instr;
+   reg    [31:2] PC4; 
+//   reg [1:0] tmp;
+   initial begin
+   instr = 0;
+   end        
+   always @(posedge clk or im_dout) begin
+ //     if ( rst ) begin
+  //       instr <= 0; 
+ //       instr <= im_dout;
+ //        PC4 <= PC+1;
+ //      end
+     if (IRWr) begin 
+     #6    instr <= im_dout;
+           PC4 <= PC+1;
+    end
+//  else if(IRWr & ~pre) begin
+ //    instr <= im_dout;
+ //    PC4 <= PC+1;
+ //    end
+
+       
+     
+//       else instr <= 0;
+   end // end always
+      
+endmodule

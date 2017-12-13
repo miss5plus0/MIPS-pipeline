@@ -1,0 +1,12 @@
+module im_4k( addr, dout );
+    
+    input [11:2] addr;
+    input [31:0] dout;
+    
+    reg [31:0] imem[1023:0] ,dout_r;
+    always @(posedge clk) begin
+    #3  dout_r = imem[addr];
+  end
+    assign dout = dout_r;
+    
+endmodule    

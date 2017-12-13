@@ -1,0 +1,7 @@
+Wed May 17 20:33:58 ?????? 2017
+Trace back: wrong # args: should be "mti_popupinternal menu w"
+    while executing
+"mti_popupinternal .main_pane.wave.interior.cs.body.pw.wf.wavewaveareapopup_popup "
+    ("after" script)
+  <2: ::tkerror {wrong # args: should be "mti_popupinternal menu w"}
+  <1: ::bgerror {wrong # args: should be "mti_popupinternal menu w"}

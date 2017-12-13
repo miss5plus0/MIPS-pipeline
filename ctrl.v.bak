@@ -1,0 +1,80 @@
+`include "ctrl_encode_def.v"
+`include "instruction_def.v"
+module ctrl(rsrtequ, Op, Funct,rs, rt,
+            GPRSel, mrn, mm2reg, mwreg, ern, em2reg, ewmem, ewreg, wreg, m2reg, wmem, 
+            jal, aluc, aluimm, EXTOp, fwdb, fwda, nostall, NPCOp);
+    
+   input 		     rsrtequ, mm2reg, mwreg, em2reg, ewreg, ewmem;       
+   input  [5:0] Op;
+   input  [5:0] Funct;
+   input  [4:0] mrn, ern, rs, rt; 
+   output       wreg, m2reg, wmem, aluimm, jal, nostall;
+   output [4:0] aluc;
+   output [1:0] NPCOp, EXTOp;
+   output [1:0] GPRSel, fwda, fwdb;
+   
+	//????????
+   wire RType;   // Type of R-Type Instruction
+   wire IType;   // Tyoe of Imm    Instruction  
+   wire BrType;  // Type of Branch Instruction
+   wire JalType;   // Type of Jal   Instruction
+   wire LdType;  // Type of Load   Instruction
+   wire StType;  // Type of Store  Instruction
+   wire LuiType; 
+   wire JType;
+   wire JrType;
+   reg [1:0] fwda, fwdb;
+  
+
+   assign RType   = (Op == `INSTR_RTYPE_OP && Funct != `INSTR_JR_FUNCT);
+   assign IType   = (Op == `INSTR_ORI_OP  );
+   assign BrType  = (Op == `INSTR_BEQ_OP  );
+   assign JalType   = (Op == `INSTR_JAL_OP  );
+	 assign LdType  = (Op == `INSTR_LW_OP   );
+	 assign StType  = (Op == `INSTR_SW_OP   );
+    assign LuiType = (Op == `INSTR_LUI_OP );
+    assign JType = (Op == `INSTR_J_OP);
+    assign JrType = (Op == `INSTR_RTYPE_OP && Funct == `INSTR_JR_FUNCT);
+    wire i_rs = RType | IType | LdType | StType | BrType;
+    wire i_rt = RType | IType | LdType | StType | BrType;
+    wire SllType = (RType & (Funct == `INSTR_SLL_FUNCT));
+    wire SrlType = (RType & (Funct == `INSTR_SRL_FUNCT));
+    wire SraType = (RType & (Funct == `INSTR_SRA_FUNCT));
+    wire SubuType = (RType & (Funct == `INSTR_SUBU_FUNCT));
+    wire AdduType = (RType & (Funct == `INSTR_ADDU_FUNCT));
+	/*************************************************/
+	/******         Control Signal           ******/
+	
+   //nostall?????PC?IR??????????????W-R????????sw??????????0???????
+   assign nostall = ~(ewreg & (ern != 0) & (i_rs & (ern == rs) | i_rt & (ern == rt)) | ewmem & StType);
+   assign wreg = (RType | IType | JalType | LuiType | LdType) & nostall;         //????????
+   assign GPRSel[0] = IType | LdType | LuiType;                                  //??rs or rt?????
+   assign GPRSel[1] = JalType;                                            
+   assign jal = JalType;                                                         //
+   assign m2reg = LdType;
+   assign aluimm = IType | LdType | LuiType | StType;
+   assign EXTOp[0] = LdType | StType;
+   assign EXTOp[1] = LuiType;
+   assign aluc[0] = AdduType | SubuType | SllType | SraType;
+   assign aluc[1] = LdType | StType | LuiType | SubuType | IType | SrlType | SraType;
+   assign aluc[2] = IType;
+   assign aluc[3] = 1'b0;
+   assign aluc[4] = SllType | SraType | SrlType;
+   assign wmem = StType & nostall;
+   assign NPCOp[0] = BrType & rsrtequ | JrType;
+   assign NPCOp[1] = JType | JalType | JrType; 
+   
+
+   always @ (ewreg or em2reg or ern or mrn or em2reg or mm2reg or rs or rt) begin
+      
+      if (ewreg & (ern != 0) & (ern == rs) & ~em2reg) fwda = 2'b01;
+      else if (mwreg & (mrn != 0) & (mrn ==rs) & ~mm2reg) fwda = 2'b10;
+      else if (mwreg & (mrn != 0) & (mrn ==rs) & mm2reg) fwda = 2'b11;
+      else fwda =2'b00;
+      
+      if (ewreg & (ern != 0) & (ern == rt) & ~em2reg) fwdb = 2'b01;
+      else if (mwreg & (mrn != 0) & (mrn == rt) & ~mm2reg) fwdb = 2'b10;
+      else if (mwreg & (mrn != 0) & (mrn == rt) & mm2reg) fwdb = 2'b11;
+      else fwdb =2'b00;
+      end
+endmodule
