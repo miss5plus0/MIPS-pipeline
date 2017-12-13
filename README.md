@@ -2,6 +2,6 @@
 
 a simulation of MIPS-pipeline by using verilog in modelsim
 
-including IF-ID-EX-MEM-WB
+including IF-ID-EX-MEM-WB,forwarding and so on
 
-even branch or jump can run on it.
+you can read pdf to learn more about MIPS instructions
